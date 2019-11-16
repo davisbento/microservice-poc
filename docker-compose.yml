@@ -1,0 +1,42 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - 'rabbitmq_data:/data'
+    networks:
+      - app-network
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    networks:
+      - app-network
+    links:
+      - rabbitmq
+    ports:
+      - '5000:5000'
+    volumes:
+      - /app/node_modules
+      - ./api:/app
+  ms-users:
+    build:
+      context: ./ms-users
+      dockerfile: Dockerfile.dev
+    networks:
+      - app-network
+    links:
+      - rabbitmq
+    volumes:
+      - /ms-users/node_modules
+      - ./ms-users:/app
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  app-network:
+    driver: bridge
