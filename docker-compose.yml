@@ -1,14 +1,49 @@
-version: '3'
+version: "3.7"
 services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - '5672:5672'
-      - '15672:15672'
+      - "5672:5672"
+      - "15672:15672"
     volumes:
-      - 'rabbitmq_data:/data'
+      - "rabbitmq_data:/data"
     networks:
       - app-network
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+    volumes:
+      - type: volume
+        source: logs
+        target: /var/log
+      - type: volume
+        source: esdata
+        target: /usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    logging:
+      driver: none
+    ports:
+      - 9300:9300
+      - 9200:9200
+    networks:
+      - app-network
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.4.0
+    environment:
+      - SERVER_NAME=localhost
+      - ELASTICSEARCH_URL=http://elasticsearch:9200/
+    ports:
+      - 5601:5601
+    networks:
+      - app-network
+    volumes:
+      - type: volume
+        source: logs
+        target: /var/log
   api:
     build:
       context: ./api
@@ -17,8 +52,10 @@ services:
       - app-network
     links:
       - rabbitmq
+    depends_on:
+      - rabbitmq
     ports:
-      - '5000:5000'
+      - "5000:5000"
     volumes:
       - /app/node_modules
       - ./api:/app
@@ -26,16 +63,25 @@ services:
     build:
       context: ./ms-users
       dockerfile: Dockerfile.dev
+    environment:
+      - ES_HOST=elasticsearch
+      - ELASTIC_URL=http://elasticsearch:9200
     networks:
       - app-network
     links:
+      - elasticsearch
+      - rabbitmq
+    depends_on:
+      - elasticsearch
       - rabbitmq
     volumes:
-      - /ms-users/node_modules
+      - /app/node_modules
       - ./ms-users:/app
 
 volumes:
   rabbitmq_data:
+  esdata:
+  logs:
 
 networks:
   app-network:

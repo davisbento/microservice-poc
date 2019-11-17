@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get(':name')
+  @Get('users/:name')
   publish(@Param('name') name: string) {
     return this.appService.publish(name);
   }
