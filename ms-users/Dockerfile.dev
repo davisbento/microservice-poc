@@ -2,10 +2,12 @@ FROM node:10-alpine
 
 WORKDIR /app
 
+RUN apk add --no-cache bash
+
 COPY ./package.json /yarn.lock ./
 
 RUN yarn
 
 COPY . .
 
-CMD ["yarn", "start:dev"]
+CMD ["./scripts/wait-for-it.sh", "rabbitmq:5672", "--", "yarn", "start:dev"]
