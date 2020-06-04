@@ -6,7 +6,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('users/:name')
-  publish(@Param('name') name: string) {
+  public publish(@Param('name') name: string) {
     return this.appService.publish(name);
   }
 }

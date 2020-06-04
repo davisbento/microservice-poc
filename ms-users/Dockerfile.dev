@@ -1,13 +1,9 @@
-FROM node:10-alpine
+FROM node:12-alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache bash
-
-COPY ./package.json /yarn.lock ./
-
-RUN yarn
-
 COPY . .
 
-CMD ["./scripts/wait-for-it.sh", "rabbitmq:5672", "--", "yarn", "start:dev"]
+RUN npm install
+
+CMD ["npm", "run", "start:dev"]

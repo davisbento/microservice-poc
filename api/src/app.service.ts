@@ -13,7 +13,7 @@ export class AppService {
     await this.clientProxy.connect();
   }
 
-  publish(name: string) {
+  public publish(name: string) {
     this.logger.log('info', 'Publicando evento...');
     this.clientProxy.emit('user_created', { name }).toPromise();
     return 'Message sent';
