@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+
 import { setData } from './facades/elastic';
 import { IGithubReturn } from './interfaces/IGithub';
 
@@ -9,19 +10,17 @@ interface IPayload {
 
 @Injectable()
 export class AppService {
-  async getEvent(data: IPayload) {
+  public async getEvent(data: IPayload) {
     console.log('**** data received ****', data);
 
     try {
-      const response = await axios.get<IGithubReturn>(
-        `https://api.github.com/users/${data.name}`,
-      );
+      const response = await axios.get<IGithubReturn>(`https://api.github.com/users/${data.name}`);
 
       console.log(`***** user find: ${response.data.login} *****`);
       await setData(response.data);
     } catch (err) {
       console.log(err.data.message);
-      console.log(`***** user not find *****`);
+      console.log('***** user not find *****');
     }
 
     return 'User created';

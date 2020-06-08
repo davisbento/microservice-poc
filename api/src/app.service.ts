@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Logger } from 'winston';
 
@@ -6,9 +6,10 @@ import { Logger } from 'winston';
 export class AppService {
   constructor(
     @Inject('EVENT_SERVICE') private readonly clientProxy: ClientProxy,
-    @Inject('winston') private readonly logger: Logger,
+    @Inject('winston') private readonly logger: Logger
   ) {}
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   async onModuleInit() {
     await this.clientProxy.connect();
   }

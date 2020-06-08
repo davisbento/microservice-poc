@@ -44,7 +44,7 @@
       }
     ],
     "constructor-super": [
-      "war"
+      1
     ],
     "no-return-await": [
       "error"
