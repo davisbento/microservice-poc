@@ -1,13 +1,18 @@
 import { Controller } from '@nestjs/common';
 import { AppService } from './app.service';
-import { EventPattern } from '@nestjs/microservices';
+import { MessagePattern, Payload, Ctx, RmqContext } from '@nestjs/microservices';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @EventPattern('user_created')
-  async getEvent(data: any) {
-    return await this.appService.getEvent(data);
+  @MessagePattern('user_created')
+  async getEvent(@Payload() data: { name: string }, @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const originalMsg = context.getMessage();
+
+    await this.appService.getEvent(data);
+
+    channel.ack(originalMsg);
   }
 }

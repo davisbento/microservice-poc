@@ -7,7 +7,7 @@ const index = 'users';
 
 export const getUsers = async () => {
   const result = await client.search({
-    index,
+    index
   });
 
   return result;
@@ -18,12 +18,12 @@ export const setData = async (data: IGithubReturn) => {
     login: data.login,
     id: data.id,
     url: data.url,
-    repos_url: data.repos_url,
+    repos_url: data.repos_url
   };
   try {
     await client.index({
       index,
-      body,
+      body
     });
     console.log('user saved on elastic', body);
   } catch (err) {

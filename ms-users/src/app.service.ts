@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 
-import { setData } from './facades/elastic';
+// import { setData } from './facades/elastic';
 import { IGithubReturn } from './interfaces/IGithub';
 
 interface IPayload {
@@ -17,7 +17,8 @@ export class AppService {
       const response = await axios.get<IGithubReturn>(`https://api.github.com/users/${data.name}`);
 
       console.log(`***** user find: ${response.data.login} *****`);
-      await setData(response.data);
+      console.log(`***** user find: ${response.data.repos_url} *****`);
+      // await setData(response.data);
     } catch (err) {
       console.log(err.data.message);
       console.log('***** user not find *****');

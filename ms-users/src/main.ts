@@ -9,6 +9,7 @@ async function bootstrap() {
     options: {
       urls: ['amqp://rabbitmq:5672'],
       queue: 'events_queue',
+      noAck: false,
       queueOptions: { durable: true }
     }
   });

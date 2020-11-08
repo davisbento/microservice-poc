@@ -14,6 +14,7 @@ import { AppService } from './app.service';
         transport: Transport.RMQ,
         options: {
           urls: ['amqp://rabbitmq:5672'],
+          noAck: false,
           queue: 'events_queue',
           queueOptions: { durable: true }
         }
@@ -21,7 +22,7 @@ import { AppService } from './app.service';
     ]),
     WinstonModule.forRoot({
       transports: [
-        new winston.transports.File({ filename: 'combined.log' }),
+        new winston.transports.File({ filename: 'logs/combined.log' }),
         new winston.transports.Console({
           level: 'info',
           format: winston.format.combine(winston.format.timestamp(), nestWinstonModuleUtilities.format.nestLike())
