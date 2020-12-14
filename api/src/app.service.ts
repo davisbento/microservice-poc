@@ -1,21 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 import { Logger } from 'winston';
+
+import { RabbitMQClient } from './facades/rabbitmq';
 
 @Injectable()
 export class AppService {
-  constructor(
-    @Inject('EVENT_SERVICE') private readonly clientProxy: ClientProxy,
-    @Inject('winston') private readonly logger: Logger
-  ) {}
+  client = new RabbitMQClient('amqp://rabbitmq:5672', 'users_queue');
 
-  public async onModuleInit() {
-    await this.clientProxy.connect();
-  }
+  constructor(@Inject('winston') private readonly logger: Logger) {}
 
   public publish(name: string) {
     this.logger.log('info', 'Publicando evento...');
-    this.clientProxy.send('user_created', { name }).toPromise();
+    this.client.sendSingleMessage({ data: { name }, pattern: 'user_created' });
     return 'Message sent';
   }
 }

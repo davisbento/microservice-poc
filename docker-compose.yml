@@ -10,63 +10,63 @@ services:
     networks:
       - app-network
 
-  # elasticsearch:
-  #   container_name: elasticsearch
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
-  #   volumes:
-  #     - type: volume
-  #       source: logs
-  #       target: /var/log
-  #     - type: volume
-  #       source: esdata
-  #       target: /usr/share/elasticsearch/data
-  #   environment:
-  #     - bootstrap.memory_lock=true
-  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-  #     - discovery.type=single-node
-  #   logging:
-  #     driver: none
-  #   ports:
-  #     - 9300:9300
-  #     - 9200:9200
-  #   networks:
-  #     - app-network
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+    volumes:
+      - type: volume
+        source: logs
+        target: /var/log
+      - type: volume
+        source: esdata
+        target: /usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    logging:
+      driver: none
+    ports:
+      - 9300:9300
+      - 9200:9200
+    networks:
+      - app-network
 
-  # kibana:
-  #   container_name: kibana
-  #   image: docker.elastic.co/kibana/kibana:7.4.0
-  #   environment:
-  #     - SERVER_NAME=localhost
-  #     - ELASTICSEARCH_URL=http://elasticsearch:9200/
-  #   ports:
-  #     - 5601:5601
-  #   networks:
-  #     - app-network
-  #   volumes:
-  #     - type: volume
-  #       source: logs
-  #       target: /var/log
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.4.0
+    environment:
+      - SERVER_NAME=localhost
+      - ELASTICSEARCH_URL=http://elasticsearch:9200/
+    ports:
+      - 5601:5601
+    networks:
+      - app-network
+    volumes:
+      - type: volume
+        source: logs
+        target: /var/log
 
-  # logstash:
-  #   image: logstash:2.3.2
-  #   command: logstash -f /etc/logstash/conf.d/logstash.conf
-  #   volumes:
-  #     - ./logstash:/etc/logstash/conf.d
-  #     - ./logstash/patterns:/opt/logstash/patterns
-  #   links:
-  #     - elasticsearch
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - app-network
+  logstash:
+    image: logstash:2.3.2
+    command: logstash -f /etc/logstash/conf.d/logstash.conf
+    volumes:
+      - ./logstash:/etc/logstash/conf.d
+      - ./logstash/patterns:/opt/logstash/patterns
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+    networks:
+      - app-network
 
-  # filebeat:
-  #   image: prima/filebeat
-  #   volumes:
-  #     - ./filebeat/filebeat.yml:/filebeat.yml
-  #     - ../api/logs:/var/log
-  #   depends_on:
-  #     - logstash
+  filebeat:
+    image: prima/filebeat
+    volumes:
+      - ./filebeat/filebeat.yml:/filebeat.yml
+      - ../api/logs:/var/log
+    depends_on:
+      - logstash
 
   api:
     build:
@@ -88,16 +88,16 @@ services:
     build:
       context: ./ms-users
       dockerfile: Dockerfile.dev
-    # environment:
-    # - ES_HOST=elasticsearch
-    # - ELASTIC_URL=http://elasticsearch:9200
+    environment:
+      - ES_HOST=elasticsearch
+      - ELASTIC_URL=http://elasticsearch:9200
     networks:
       - app-network
     links:
-      # - elasticsearch
+      - elasticsearch
       - rabbitmq
     depends_on:
-      # - elasticsearch
+      - elasticsearch
       - rabbitmq
     volumes:
       - /app/node_modules
