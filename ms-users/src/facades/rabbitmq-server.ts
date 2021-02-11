@@ -1,6 +1,5 @@
 import { CustomTransportStrategy, Server } from '@nestjs/microservices';
 import * as amqp from 'amqplib';
-import { Observable } from 'rxjs';
 
 export class RabbitMQServer extends Server implements CustomTransportStrategy {
   private server: amqp.Connection = null;
@@ -13,7 +12,7 @@ export class RabbitMQServer extends Server implements CustomTransportStrategy {
   public async listen() {
     await this.init();
     this.channel.consume(this.queue, this.handleMessage.bind(this), {
-      noAck: true
+      noAck: false
     });
   }
 
@@ -30,18 +29,17 @@ export class RabbitMQServer extends Server implements CustomTransportStrategy {
     if (!this.messageHandlers.get(pattern)) {
       return;
     }
-    // this.channel.ack(message);
-    const handler = this.messageHandlers.get(pattern);
-    const response$ = this.transformToObservable(await handler(messageObj.data)) as Observable<any>;
-    response$ &&
-      this.send(response$, data => {
-        this.sendMessage(data);
-      });
-  }
 
-  private sendMessage(message: any) {
-    const buffer = Buffer.from(JSON.stringify(message));
-    this.channel.sendToQueue(this.queue, buffer);
+    const handler = this.messageHandlers.get(pattern);
+
+    try {
+      const response$ = await handler(messageObj);
+      await response$.toPromise();
+
+      this.channel.ack(message);
+    } catch {
+      this.channel.nack(message, false, false);
+    }
   }
 
   private async init() {
