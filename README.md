@@ -21,3 +21,9 @@ http://localhost:9200
 ```
 http://localhost:15672
 ```
+
+## Test the API
+
+```
+curl http://localhost:5000/users/:github-username
+```
