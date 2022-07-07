@@ -9,7 +9,6 @@ import { AppService } from './app.service';
   imports: [
     WinstonModule.forRoot({
       transports: [
-        new winston.transports.File({ filename: 'logs/combined.log' }),
         new winston.transports.Console({
           level: 'info',
           format: winston.format.combine(winston.format.timestamp(), nestWinstonModuleUtilities.format.nestLike())

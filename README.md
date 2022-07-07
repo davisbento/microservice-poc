@@ -1,4 +1,6 @@
-# STARTUP DEV MODE
+# Microservice POC built using Nest and Lerna to manage the monorepo.
+
+## Getting started (dev mode)
 
 ```
 docker-compose up

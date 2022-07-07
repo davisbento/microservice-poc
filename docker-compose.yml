@@ -46,31 +46,9 @@ services:
       - type: volume
         source: logs
         target: /var/log
-
-  logstash:
-    image: logstash:2.3.2
-    command: logstash -f /etc/logstash/conf.d/logstash.conf
-    volumes:
-      - ./logstash:/etc/logstash/conf.d
-      - ./logstash/patterns:/opt/logstash/patterns
-    links:
-      - elasticsearch
-    depends_on:
-      - elasticsearch
-    networks:
-      - app-network
-
-  filebeat:
-    image: prima/filebeat
-    volumes:
-      - ./filebeat/filebeat.yml:/filebeat.yml
-      - ../api/logs:/var/log
-    depends_on:
-      - logstash
-
   api:
     build:
-      context: ./api
+      context: ./packages/api
       dockerfile: Dockerfile.dev
     networks:
       - app-network
@@ -82,11 +60,11 @@ services:
       - "5000:5000"
     volumes:
       - /app/node_modules
-      - ./api:/app
+      - ./packages/api:/app
 
   ms-users:
     build:
-      context: ./ms-users
+      context: ./packages/ms-users
       dockerfile: Dockerfile.dev
     environment:
       - ES_HOST=elasticsearch
@@ -101,7 +79,7 @@ services:
       - rabbitmq
     volumes:
       - /app/node_modules
-      - ./ms-users:/app
+      - ./packages/ms-users:/app
 
 volumes:
   rabbitmq_data:
