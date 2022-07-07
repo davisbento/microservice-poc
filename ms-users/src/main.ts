@@ -8,6 +8,6 @@ async function bootstrap() {
     strategy: new RabbitMQServer('amqp://rabbitmq:5672', 'users_queue')
   });
 
-  app.listen(() => console.log('Microservice is listening'));
+  app.listen();
 }
 bootstrap();
