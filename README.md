@@ -1,4 +1,4 @@
-# Microservice POC built using Nest and Lerna to manage the monorepo.
+# Microservice POC built using Nest and Docker Compose to up and manage all services.
 
 ## Getting started (dev mode)
 
@@ -34,5 +34,5 @@ http://localhost:15672
 ## Test the API
 
 ```
-curl http://localhost:5000/users/:github-username
+curl http://localhost:8080/users/:github-username
 ```

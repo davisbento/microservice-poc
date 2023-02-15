@@ -1,12 +1,12 @@
-version: "3.7"
+version: '3.7'
 services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - '5672:5672'
+      - '15672:15672'
     volumes:
-      - "rabbitmq_data:/data"
+      - 'rabbitmq_data:/data'
     networks:
       - app-network
 
@@ -22,8 +22,9 @@ services:
         target: /usr/share/elasticsearch/data
     environment:
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
       - discovery.type=single-node
+      - xpack.security.enabled=false
     logging:
       driver: none
     ports:
@@ -57,7 +58,7 @@ services:
     depends_on:
       - rabbitmq
     ports:
-      - "5000:5000"
+      - '8080:8080'
     volumes:
       - /app/node_modules
       - ./packages/api:/app

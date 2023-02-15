@@ -9,7 +9,6 @@ export class AppController {
 
   @MessagePattern('user_created')
   async getEvent(@Payload() data: { name: string }) {
-    console.log('caiu aqui', data);
     await this.appService.getEvent(data);
   }
 }

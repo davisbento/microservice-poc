@@ -8,7 +8,6 @@ export class RabbitMQClient {
     const channel = await server.createChannel();
 
     channel.assertQueue(this.queue, { durable: false });
-    channel.assertExchange('users_exchange', 'direct');
 
     channel.sendToQueue(this.queue, Buffer.from(JSON.stringify(messageObj)));
   }
