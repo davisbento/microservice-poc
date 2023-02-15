@@ -2,6 +2,13 @@
 
 ## Getting started (dev mode)
 
+```mermaid
+graph LR
+A(HTTP Request)
+    A --> B{API Gateway}
+    B -->|RabbitMQ-users| C[Users MS]
+```
+
 ```
 docker-compose up
 ```
