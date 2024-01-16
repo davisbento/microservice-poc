@@ -1,13 +1,15 @@
 import { Client } from '@elastic/elasticsearch';
 import { IGithubReturn } from '../interfaces/IGithub';
+import { ILog } from 'interfaces/ILog';
 
 const elasticUrl = process.env.ELASTIC_URL || 'http://localhost:9200';
 const client = new Client({ node: elasticUrl });
 const index = 'users';
+const logIndex = 'logs';
 
 export const getUsers = async () => {
   const result = await client.search({
-    index
+    index,
   });
 
   return result;
@@ -18,16 +20,33 @@ export const setData = async (data: IGithubReturn) => {
     login: data.login,
     id: data.id,
     url: data.url,
-    repos_url: data.repos_url
+    repos_url: data.repos_url,
+    timestamp: new Date(),
   };
   try {
     await client.index({
       index,
-      body
+      body,
     });
     console.log('user saved on elastic', body);
   } catch (err) {
     console.log('error saving user', err);
+  }
+};
+
+export const setDataLog = async (data: ILog) => {
+  const body = {
+    log: data.log,
+    timestamp: new Date(),
+  };
+  try {
+    await client.index({
+      index: logIndex,
+      body,
+    });
+    console.log('log saved on elastic', body);
+  } catch (err) {
+    console.log('error saving log', err);
   }
 };
 

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Logger } from 'winston';
 
-import { RabbitMQClient } from './facades/rabbitmq';
+import { RabbitMQClient } from './utils/rabbitmq';
 
 @Injectable()
 export class AppService {
@@ -11,7 +11,10 @@ export class AppService {
 
   public async publish(name: string) {
     this.logger.log('info', 'Publicando evento...');
-    await this.client.sendSingleMessage({ data: { name }, pattern: 'user_created' });
+    await this.client.sendSingleMessage({
+      data: { name },
+      pattern: 'user_created',
+    });
     return 'Message sent';
   }
 }

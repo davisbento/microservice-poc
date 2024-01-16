@@ -5,7 +5,7 @@
     "prettier"
   ],
   "extends": [
-    "prettier/@typescript-eslint",
+    "prettier",
     "plugin:prettier/recommended"
   ],
   "parserOptions": {
@@ -44,7 +44,7 @@
       }
     ],
     "constructor-super": [
-      "warn"
+      1
     ],
     "no-return-await": [
       "error"

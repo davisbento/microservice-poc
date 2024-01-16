@@ -14,13 +14,13 @@ import { AppService } from './app.service';
           urls: ['amqp://rabbitmq:5672'],
           queue: 'users_queue',
           queueOptions: {
-            durable: false
-          }
-        }
-      }
-    ])
+            durable: false,
+          },
+        },
+      },
+    ]),
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService],
 })
 export class AppModule {}
