@@ -49,7 +49,7 @@ services:
         target: /var/log
   api:
     build:
-      context: ./packages/api
+      context: ./api
       dockerfile: Dockerfile.dev
     networks:
       - app-network
@@ -61,11 +61,11 @@ services:
       - '8080:8080'
     volumes:
       - /app/node_modules
-      - ./packages/api:/app
+      - ./api:/app
 
   ms-users:
     build:
-      context: ./packages/ms-users
+      context: ./ms-users
       dockerfile: Dockerfile.dev
     environment:
       - ES_HOST=elasticsearch
@@ -80,7 +80,7 @@ services:
       - rabbitmq
     volumes:
       - /app/node_modules
-      - ./packages/ms-users:/app
+      - ./ms-users:/app
 
 volumes:
   rabbitmq_data:
