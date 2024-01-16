@@ -1,7 +1,5 @@
 # Microservice POC built using Nest and Docker Compose to up and manage all services.
 
-## Getting started (dev mode)
-
 ```mermaid
 graph LR
 A(HTTP Request)
@@ -9,6 +7,7 @@ A(HTTP Request)
     B -->|RabbitMQ-users| C[Users MS]
 ```
 
+## Getting started (dev mode)
 ```
 docker-compose up
 ```
