@@ -1,5 +1,4 @@
 import { Client } from '@elastic/elasticsearch';
-import { IGithubReturn } from '../interfaces/IGithub';
 import { ILog } from 'interfaces/ILog';
 
 const elasticUrl = process.env.ELASTIC_URL || 'http://localhost:9200';
@@ -15,12 +14,10 @@ export const getUsers = async () => {
   return result;
 };
 
-export const setData = async (data: IGithubReturn) => {
+export const setData = async (login: string, url: string) => {
   const body = {
-    login: data.login,
-    id: data.id,
-    url: data.url,
-    repos_url: data.repos_url,
+    login,
+    url,
     timestamp: new Date(),
   };
   try {

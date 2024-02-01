@@ -1,14 +1,19 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
-import { AppService } from './app.service';
+import { AppService, IPayload } from './app.service';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @MessagePattern('user_created')
-  async getEvent(@Payload() data: { name: string }) {
-    await this.appService.getEvent(data);
+  userCreatedEvent(@Payload() data: IPayload) {
+    console.log('User created event', data);
+
+    this.appService.userCreatedEvent({
+      login: data.login,
+      url: data.url,
+    });
   }
 }

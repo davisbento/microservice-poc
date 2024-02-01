@@ -12,7 +12,7 @@ import { AppService } from './app.service';
         transport: Transport.RMQ,
         options: {
           urls: ['amqp://rabbitmq:5672'],
-          queue: 'users_queue',
+          queue: 'logs_queue',
           queueOptions: {
             durable: false,
           },

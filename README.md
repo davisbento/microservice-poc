@@ -13,7 +13,7 @@
 graph LR
 A(HTTP Request)
     A --> B{API Gateway}
-    B -->|RabbitMQ-users| C[Users MS]
+    B -->|RabbitMQ-logs| C[Logs MS]
 ```
 
 ## Getting started (dev mode)

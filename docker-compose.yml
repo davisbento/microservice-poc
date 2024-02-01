@@ -63,9 +63,9 @@ services:
       - /app/node_modules
       - ./api:/app
 
-  ms-users:
+  ms-logs:
     build:
-      context: ./ms-users
+      context: ./ms-logs
       dockerfile: Dockerfile.dev
     environment:
       - ES_HOST=elasticsearch
@@ -80,7 +80,7 @@ services:
       - rabbitmq
     volumes:
       - /app/node_modules
-      - ./ms-users:/app
+      - ./ms-logs:/app
 
 volumes:
   rabbitmq_data:

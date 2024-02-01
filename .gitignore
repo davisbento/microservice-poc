@@ -1,5 +1,5 @@
 enabled_plugins
 .DS_Store
-node_modules
-api/dist
-ms-users/dist
+*/dist
+*/build
+*/node_modules
